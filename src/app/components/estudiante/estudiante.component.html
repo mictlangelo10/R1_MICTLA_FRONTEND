@@ -1,0 +1,422 @@
+<div class="row mt-1 justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-secondary mb-3">
+      <div class="card-header">Formulario de registro</div>
+      <div class="card-body">
+        <mat-stepper #stepper>
+          <!-- Step 1 -->
+          <mat-step
+            [stepControl]="stepOneForm"
+            errorMessage="Completa todos los campos."
+          >
+            <ng-template matStepLabel>Información personal</ng-template>
+            <form [formGroup]="stepOneForm">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="Nombre"
+                      placeholder="Nombre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoP"
+                      placeholder="Apellido Paterno"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoM"
+                      placeholder="Apellido Materno"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="Telefono"
+                      placeholder="Teléfono"
+                      type="tel"
+                      (input)="onPhoneNumberInput($event, 'Telefono')"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="CorreoElectronico"
+                      placeholder="Correo Electrónico"
+                      type="email"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <mat-label>Bachillerato de Procedencia</mat-label>
+                    <mat-select formControlName="Bachillerato">
+                      <mat-option
+                        *ngFor="let bachillerato of bachilleratos"
+                        [value]="bachillerato.id_bachillerato"
+                        >{{ bachillerato.nombre_bachillerato }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="PromedioBachillerato"
+                      placeholder="Promedio en el Bachillerato"
+                      type="number"
+                      step="0.01"
+                    />
+                    <mat-error
+                      *ngIf="
+                        stepOneForm
+                          .get('PromedioBachillerato')
+                          ?.hasError('required')
+                      "
+                    >
+                      Este campo es obligatorio.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        stepOneForm.get('PromedioBachillerato')?.hasError('min')
+                      "
+                    >
+                      El promedio debe ser igual o mayor a 6.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        stepOneForm.get('PromedioBachillerato')?.hasError('max')
+                      "
+                    >
+                      El promedio debe ser igual o menor a 10.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <mat-label>Especialidad Cursada </mat-label>
+                    <mat-select formControlName="Especialidad">
+                      <mat-option
+                        *ngFor="let especialidad of especialidades"
+                        [value]="especialidad.id_especialidad"
+                        >{{ especialidad.nombre_especialidad }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <label for="fotoInputEstudiante" style="color: black"
+                    >Subir foto del estudiante</label
+                  >
+                  <input
+                    type="file"
+                    id="fotoInputEstudiante"
+                    (change)="onFileSelected($event, 'FotoEstudiante')"
+                    accept="image/*"
+                  />
+
+                  <div *ngIf="selectedPdfNameImagen" style="color: black">
+                    Nombre del archivo: {{ selectedPdfNameImagen }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div *ngIf="selectedImageUrl" class="image-preview">
+                    <img
+                      [src]="selectedImageUrl"
+                      alt="Selected Image"
+                      style="width: 100%; height: auto"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <div *ngIf="stepOneForm.invalid" class="error-message">
+                    Por favor, completa todos los campos antes de pasar al
+                    siguiente paso.
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="goToNextStep()"
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+          <!-- Step 2 -->
+          <mat-step
+            [stepControl]="stepTwoForm"
+            errorMessage="Completa todos los campos."
+          >
+            <ng-template matStepLabel>Información de Contacto</ng-template>
+            <form [formGroup]="stepTwoForm">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="Calle"
+                      placeholder="Calle Donde Vives"
+                      type="text"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="Numero"
+                      placeholder="Número Exterior"
+                      type="number"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="Colonia"
+                      placeholder="Colonia"
+                      type="text"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <mat-label>Ciudad</mat-label>
+                    <mat-select formControlName="Ciudad">
+                      <mat-option
+                        *ngFor="let ciudad of ciudades"
+                        [value]="ciudad.id_ciudad"
+                        >{{ ciudad.nombre_ciudad }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="CodigoPostal"
+                      placeholder="Código Postal"
+                      type="number"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="TelefonoCasa"
+                      placeholder="Teléfono de Casa"
+                      type="tel"
+                      (input)="onPhoneNumberInput($event, 'TelefonoCasa')"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="TelefonoPadres"
+                      placeholder="Teléfono del Tutor"
+                      type="tel"
+                      (input)="onPhoneNumberInput($event, 'TelefonoPadres')"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="NombreMadre"
+                      placeholder="Nombre de la Madre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoPMadre"
+                      placeholder="Apellido Paterno de la Madre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoMMadre"
+                      placeholder="Apellido Materno de la Madre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="NombrePadre"
+                      placeholder="Nombre del Padre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoPPadre"
+                      placeholder="Apellido Paterno del Padre"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <input
+                      matInput
+                      formControlName="ApellidoMPadre"
+                      placeholder="Apellido Materno del Padre"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <!-- Mensaje de error para el paso 2 -->
+                  <div *ngIf="stepTwoForm.invalid" class="error-message">
+                    Por favor, completa todos los campos antes de pasar al
+                    siguiente paso.
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    (click)="stepper.previous()"
+                  >
+                    Atrás
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="goToNextStep()"
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Step 3 -->
+          <mat-step>
+            <ng-template matStepLabel
+              >Información Académica y Documentos Adjuntos</ng-template
+            >
+            <form
+              [formGroup]="stepThreeForm"
+              (ngSubmit)="submitForm()"
+              errorMessage="Completa todos los campos."
+            >
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field style="color: black">
+                    <mat-label>Carrera que Cursará</mat-label>
+                    <mat-select formControlName="Carrera">
+                      <mat-option
+                        *ngFor="let carrera of carreras"
+                        [value]="carrera.id_carrera"
+                        >{{ carrera.nombre_carrera }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <br />
+                <div class="col-md-4">
+                  <label for="certificadoInputBachillerato" style="color: black"
+                    >Subir certificado de bachillerato</label
+                  >
+                  <input
+                    type="file"
+                    id="certificadoInputBachillerato"
+                    (change)="onFileSelected($event, 'CertificadoBachillerato')"
+                    accept=".pdf"
+                  />
+
+                  <div *ngIf="selectedPdfNameBachillerato" style="color: black">
+                    Nombre del archivo: {{ selectedPdfNameBachillerato }}
+                  </div>
+                  <iframe
+                    *ngIf="selectedPdfUrlBachillerato"
+                    [src]="selectedPdfUrlBachillerato"
+                    width="400"
+                    height="300"
+                  ></iframe>
+                </div>
+                <div class="col-md-4">
+                  <label for="certificadoInputDomicilio" style="color: black"
+                    >Subir comprobante de Domicilio:</label
+                  >
+
+                  <input
+                    type="file"
+                    id="certificadoInputDomicilio"
+                    (change)="onFileSelected($event, 'ComprobanteDomicilio')"
+                    accept=".pdf"
+                  />
+                  <div *ngIf="selectedPdfNameDomicilio" style="color: black">
+                    Nombre del archivo: {{ selectedPdfNameDomicilio }}
+                  </div>
+                  <iframe
+                    *ngIf="selectedPdfUrlDomicilio"
+                    [src]="selectedPdfUrlDomicilio"
+                    width="400"
+                    height="300"
+                  ></iframe>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    (click)="stepper.previous()"
+                  >
+                    Atrás
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="submitForm()"
+                  >
+                    Registrar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+        </mat-stepper>
+      </div>
+    </div>
+  </div>
+</div>

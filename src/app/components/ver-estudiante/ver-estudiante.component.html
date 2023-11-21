@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="title">
+    <h4>Listado de estudiantes</h4>
+    <button type="button" class="btn btn-primary" routerLink="/add">
+      Agregar Estudiante
+    </button>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido Paterno</th>
+        <th scope="col">Apellido Materno</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listUsers" class="table-active">
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.ApellidoP }}</td>
+        <td>{{ item.ApellidoM }}</td>
+        <td>
+          <button
+            routerLink="/edit/{{ item.id }}"
+            type="button"
+            class="btn btn-info btn-sm"
+          >
+            Edit
+          </button>
+          <button type="button" class="btn btn-danger btn-sm ms-2">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
